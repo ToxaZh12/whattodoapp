@@ -6,17 +6,17 @@ const todoList = $("todoList");
 const pagination = $("pagination");
 const errorBox = document.querySelector(".error-message");
 
-let todos = []; // локальный массив задач
+let todos = []; 
 const itemsPerPage = 3;
 let currentPage = 1;
 
-/* ===== Загрузка задач из Supabase ===== */
+
 loadTodos();
 
 async function loadTodos() {
   try {
     const { data, error } = await supabase
-      .from("whattodoapp")      // <-- твоя таблица
+      .from("whattodoapp")      
       .select("id, text")
       .order("id", { ascending: false });
 
@@ -33,7 +33,7 @@ async function loadTodos() {
   render();
 }
 
-/* ===== Добавление задачи ===== */
+
 addBtn.onclick = async () => {
   const text = todoInput.value.trim();
   if (!text) return showError("Enter a task");
@@ -46,13 +46,13 @@ addBtn.onclick = async () => {
 
   try {
     const { data, error } = await supabase
-      .from("whattodoapp")      // <-- твоя таблица
+      .from("whattodoapp")      
       .insert([{ text }])
       .select("id, text")
       .limit(1);
 
     if (!error && data?.length) {
-      todos[0] = { id: data[0].id, text: data[0].text }; // обновляем id
+      todos[0] = { id: data[0].id, text: data[0].text }; 
       localStorage.setItem("todos", JSON.stringify(todos));
       render();
     }
@@ -61,7 +61,7 @@ addBtn.onclick = async () => {
   }
 };
 
-/* ===== Рендер всех задач ===== */
+
 function render() {
   renderTodos();
   renderPagination();
@@ -87,7 +87,7 @@ function renderTodos() {
   });
 }
 
-/* ===== Пагинация ===== */
+
 function renderPagination() {
   pagination.innerHTML = "";
   const pages = Math.max(1, Math.ceil(todos.length / itemsPerPage));
@@ -102,7 +102,7 @@ function renderPagination() {
   }
 }
 
-/* ===== Редактирование задачи ===== */
+
 function editTask(index, li) {
   const item = todos[index];
   li.innerHTML = `
@@ -123,7 +123,7 @@ function editTask(index, li) {
     if (old.id) {
       try {
         await supabase
-          .from("whattodoapp")     // <-- твоя таблица
+          .from("whattodoapp")     
           .update({ text: value })
           .eq("id", old.id);
       } catch (e) {
@@ -135,7 +135,7 @@ function editTask(index, li) {
   li.querySelector(".delete-btn").onclick = () => deleteTask(index);
 }
 
-/* ===== Удаление задачи ===== */
+
 async function deleteTask(index) {
   const removed = todos.splice(index, 1)[0];
   localStorage.setItem("todos", JSON.stringify(todos));
@@ -151,7 +151,7 @@ async function deleteTask(index) {
   }
 }
 
-/* ===== Вспомогательные функции ===== */
+
 function showError(text) {
   errorBox.textContent = text;
   errorBox.style.display = "block";
