@@ -6,22 +6,21 @@ const todoList = $("todoList");
 const pagination = $("pagination");
 const errorBox = document.querySelector(".error-message");
 
-let todos = [];                // array of { id?, text } or only text depending on loaded source
+let todos = []; // локальный массив задач
 const itemsPerPage = 3;
 let currentPage = 1;
 
-/* ===== Load on start: try Supabase, fallback to localStorage ===== */
+/* ===== Загрузка задач из Supabase ===== */
 loadTodos();
 
 async function loadTodos() {
   try {
     const { data, error } = await supabase
-      .from("todos")
+      .from("whattodoapp")      // <-- твоя таблица
       .select("id, text")
       .order("id", { ascending: false });
 
     if (!error && data) {
-      // store as array of objects to keep ids for updates/deletes
       todos = data.map(t => ({ id: t.id, text: t.text }));
       localStorage.setItem("todos", JSON.stringify(todos));
     } else {
@@ -30,42 +29,39 @@ async function loadTodos() {
   } catch (e) {
     todos = JSON.parse(localStorage.getItem("todos")) || [];
   }
+
   render();
 }
 
-/* ===== Add ===== */
+/* ===== Добавление задачи ===== */
 addBtn.onclick = async () => {
   const text = todoInput.value.trim();
   if (!text) return showError("Enter a task");
 
-  // optimistic local update
-  todos.unshift({ text }); 
+  todos.unshift({ text }); // добавляем локально
   localStorage.setItem("todos", JSON.stringify(todos));
   todoInput.value = "";
   currentPage = 1;
   render();
 
-  // persist to Supabase, then update id if returned
   try {
     const { data, error } = await supabase
-      .from("todos")
+      .from("whattodoapp")      // <-- твоя таблица
       .insert([{ text }])
       .select("id, text")
       .limit(1);
 
     if (!error && data?.length) {
-      // replace the first item (optimistic) with returned item (contains id)
-      todos[0] = { id: data[0].id, text: data[0].text };
+      todos[0] = { id: data[0].id, text: data[0].text }; // обновляем id
       localStorage.setItem("todos", JSON.stringify(todos));
       render();
     }
   } catch (e) {
-    // ignore network failure (we already saved locally)
     showError("Saved locally — will sync when online");
   }
 };
 
-/* ===== Render ===== */
+/* ===== Рендер всех задач ===== */
 function render() {
   renderTodos();
   renderPagination();
@@ -91,10 +87,11 @@ function renderTodos() {
   });
 }
 
-/* ===== Pagination ===== */
+/* ===== Пагинация ===== */
 function renderPagination() {
   pagination.innerHTML = "";
   const pages = Math.max(1, Math.ceil(todos.length / itemsPerPage));
+
   for (let i = 1; i <= pages; i++) {
     const btn = document.createElement("button");
     btn.className = "pagination-btn";
@@ -105,7 +102,7 @@ function renderPagination() {
   }
 }
 
-/* ===== Edit ===== */
+/* ===== Редактирование задачи ===== */
 function editTask(index, li) {
   const item = todos[index];
   li.innerHTML = `
@@ -124,26 +121,21 @@ function editTask(index, li) {
     render();
 
     if (old.id) {
-      // try persist change
       try {
-        await supabase.from("todos").update({ text: value }).eq("id", old.id);
-      } catch (e) { showError("Saved locally — will sync when online"); }
-    } else {
-      // no id yet: try to find created row server-side and update local id
-      try {
-        const { data } = await supabase.from("todos").select("id, text").eq("text", value).limit(1);
-        if (data?.length) {
-          todos[index].id = data[0].id;
-          localStorage.setItem("todos", JSON.stringify(todos));
-        }
-      } catch (e) {}
+        await supabase
+          .from("whattodoapp")     // <-- твоя таблица
+          .update({ text: value })
+          .eq("id", old.id);
+      } catch (e) {
+        showError("Saved locally — will sync when online");
+      }
     }
   };
 
   li.querySelector(".delete-btn").onclick = () => deleteTask(index);
 }
 
-/* ===== Delete ===== */
+/* ===== Удаление задачи ===== */
 async function deleteTask(index) {
   const removed = todos.splice(index, 1)[0];
   localStorage.setItem("todos", JSON.stringify(todos));
@@ -152,15 +144,14 @@ async function deleteTask(index) {
 
   if (removed.id) {
     try {
-      await supabase.from("todos").delete().eq("id", removed.id);
-    } catch (e) { showError("Deleted locally — will sync when online"); }
-  } else {
-    // try delete by text as fallback
-    try { await supabase.from("todos").delete().eq("text", removed.text); } catch (e) {}
+      await supabase.from("whattodoapp").delete().eq("id", removed.id);
+    } catch (e) {
+      showError("Deleted locally — will sync when online");
+    }
   }
 }
 
-/* ===== Helpers ===== */
+/* ===== Вспомогательные функции ===== */
 function showError(text) {
   errorBox.textContent = text;
   errorBox.style.display = "block";
