@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Todo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main class="container">
+    <header>
+      <h1>✅ Smart Todo</h1>
+      <p class="subtitle">Organize your tasks smartly</p>
+    </header>
+
+    <div id="errorMessage" class="error-message"></div>
+    <section class="input-group">
+      <input 
+        type="text" 
+        id="todoInput" 
+        class="todo-input" 
+        placeholder="What needs to be done?"
+        autocomplete="off"
+      >
+      <button id="addBtn" class="add-btn">Add Task</button>
+    </section>
+    <section class="list-section">
+      <ul id="todoList" class="todo-list"></ul>
+    </section>
+    <footer>
+      <div id="pagination" class="pagination"></div>
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
