@@ -2,7 +2,7 @@
 # README.md
 
 ## Opis aplikacji
-Aplikacja **Smart Todo App** to prosta publiczna lista zadań (CRUD), działająca w przeglądarce.  
+Aplikacja **What Todo App** to prosta publiczna lista zadań (CRUD), działająca w przeglądarce.  
 Umożliwia użytkownikom dodawanie, edytowanie, usuwanie oraz przeglądanie wspólnych zadań widocznych dla wszystkich użytkowników w czasie rzeczywistym.
 
 Dane są zapisywane w:
