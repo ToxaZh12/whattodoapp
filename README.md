@@ -92,3 +92,16 @@ Aplikacja działa w modelu **klient – chmura**:
 1. Sklonuj repozytorium:  
    ```bash
    git clone <link_do_repo>
+   Przejdź do katalogu projektu:
+
+cd <nazwa_projektu>
+
+
+Otwórz plik index.html w przeglądarce.
+✅ Gotowe — nie jest wymagany żaden serwer ani instalacja pakietów.
+
+Hosting
+
+Aplikacja hostowana na: Vercel
+Publiczny adres aplikacji:
+https://whattodoapp.vercel.app/
