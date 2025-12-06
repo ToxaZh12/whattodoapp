@@ -103,5 +103,7 @@ Otwórz plik index.html w przeglądarce.
 Hosting
 
 Aplikacja hostowana na: Vercel
+
 Publiczny adres aplikacji:
+
 https://whattodoapp.vercel.app/
