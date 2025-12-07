@@ -1,6 +1,4 @@
 # whattodoapp
-# README.md
-
 ## Opis aplikacji
 Aplikacja **What Todo App** to prosta publiczna lista zadań (CRUD), działająca w przeglądarce.  
 Umożliwia użytkownikom dodawanie, edytowanie, usuwanie oraz przeglądanie wspólnych zadań widocznych dla wszystkich użytkowników w czasie rzeczywistym.
@@ -98,7 +96,7 @@ cd <nazwa_projektu>
 
 
 Otwórz plik index.html w przeglądarce.
-✅ Gotowe — nie jest wymagany żaden serwer ani instalacja pakietów.
+Gotowe — nie jest wymagany żaden serwer ani instalacja pakietów.
 
 Hosting
 
@@ -107,3 +105,83 @@ Aplikacja hostowana na: Vercel
 Publiczny adres aplikacji:
 
 https://whattodoapp.vercel.app/
+
+
+Dodane pola
+
+- `deadline` (DATE) – termin wykonania zadania  
+- `priority` (TEXT: `low`, `medium`, `high`) – priorytet zadania  
+
+Pola są wymagane oraz walidowane zarówno po stronie API, jak i frontendowej.
+
+---
+
+##Zmiany w bazie danych
+
+Do tabeli zostały dodane kolumny:
+
+```sql
+ALTER TABLE whattodoapp
+    ADD COLUMN deadline DATE NOT NULL,
+    ADD COLUMN priority VARCHAR(16) NOT NULL;
+Migracja została zastosowana bez wpływu na istniejące dane.
+
+Zmiany w API
+rozbudowa modelu/DTO o deadline i priority
+
+walidacja danych wejściowych:
+
+deadline – wymagany
+
+priority – wymagany, dostępne wartości: low, medium, high
+
+aktualizacja endpointów:
+
+POST – zapisuje nowe pola
+
+PUT – aktualizuje pola
+
+GET – zwraca pełny obiekt z nowymi wartościami
+
+zachowano pełną kompatybilność z dotychczasowym CRUD-em partnera
+
+Zmiany we Frontendzie
+Formularz dodawania:
+nowe pole Deadline
+
+nowe pole Priority (select)
+
+Formularz edycji:
+możliwość modyfikacji deadline i priority
+
+Lista zadań:
+wyświetlanie obu nowych pól przy każdym elemencie
+
+UI działa poprawnie, a wcześniejsze funkcje partnera pozostały nienaruszone.
+
+🧪 Instrukcja testowania
+Uruchomić backend:
+
+bash
+Skopiuj kod
+mvn spring-boot:run
+lub
+
+bash
+Skopiuj kod
+docker compose up --build
+Upewnić się, że migracja tabeli została zastosowana.
+
+Uruchomić frontend (np. otworzyć index.html).
+
+Przetestować:
+
+dodawanie zadania z deadline + priority
+
+edycję obu nowych pól
+
+poprawność danych w UI i w bazie
+
+zachowanie endpointów (np. przez Postman/curl)
+
+działanie partnerowych funkcji w ramach smoke-testu
