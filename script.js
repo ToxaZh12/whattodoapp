@@ -14,7 +14,7 @@ let currentPage = 1;
 
 loadTodos();
 
-// ✅ ЗАГРУЗКА ИЗ SUPABASE + localStorage
+
 async function loadTodos() {
   try {
     const { data, error } = await supabase
