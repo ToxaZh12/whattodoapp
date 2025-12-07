@@ -14,7 +14,7 @@ let currentPage = 1;
 
 loadTodos();
 
-
+// ✅ ЗАГРУЗКА ИЗ SUPABASE + localStorage
 async function loadTodos() {
   try {
     const { data, error } = await supabase
@@ -41,7 +41,12 @@ addBtn.onclick = async () => {
   const opis = todoOpis.value.trim();
   const deadline = todoDeadline.value;
 
-  if (!text || !opis || !deadline) return showError("Fill all fields");
+
+  console.log("DEBUG SEND:", { text, opis, deadline });
+
+  if (!text || !opis || !deadline) {
+    return showError("Fill all fields");
+  }
 
   const newTodo = { text, opis, deadline };
   todos.unshift(newTodo);
@@ -66,8 +71,12 @@ addBtn.onclick = async () => {
       todos[0] = data[0];
       localStorage.setItem("todos", JSON.stringify(todos));
       render();
+    } else {
+      console.error("SUPABASE ERROR:", error);
+      showError("Supabase insert error");
     }
-  } catch {
+  } catch (e) {
+    console.error("NETWORK ERROR:", e);
     showError("Saved locally — will sync when online");
   }
 };
@@ -115,7 +124,7 @@ function renderPagination() {
   }
 }
 
-// ✅ РЕДАКТИРОВАНИЕ
+
 function editTask(index, li) {
   const item = todos[index];
 
@@ -150,7 +159,6 @@ function editTask(index, li) {
 
   li.querySelector(".delete-btn").onclick = () => deleteTask(index);
 }
-
 
 async function deleteTask(index) {
   const removed = todos.splice(index, 1)[0];
