@@ -1,10 +1,11 @@
-
+/* ==========================
+   GLOBAL
+========================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 
 body {
   font-family: "Roboto", Arial, sans-serif;
@@ -14,23 +15,28 @@ body {
   justify-content: center;
   align-items: center;
   color: #fff;
+  padding: 40px 10px;
 }
 
-
+/* ==========================
+   CONTAINER (шире)
+========================== */
 .container {
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(14px);
-  border-radius: 20px;
+  border-radius: 22px;
   padding: 35px;
   width: 100%;
-  max-width: 460px;
+  max-width: 700px; /* ← УВЕЛИЧЕНО */
   text-align: center;
   box-shadow: 0 0 40px rgba(127, 0, 255, 0.35);
   animation: fadeIn 0.6s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-
+/* ==========================
+   TITLE
+========================== */
 h1 {
   font-size: 2rem;
   margin-bottom: 25px;
@@ -40,12 +46,14 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 
-
+/* ==========================
+   INPUTS
+========================== */
 .todo-input {
   width: 100%;
   padding: 14px;
   background: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
   font-size: 16px;
   margin-bottom: 15px;
@@ -58,11 +66,13 @@ h1 {
   transform: scale(1.02);
 }
 
-
+/* ==========================
+   ADD BUTTON
+========================== */
 .add-btn {
   width: 100%;
   padding: 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #a855f7, #38bdf8);
   border: none;
   font-size: 16px;
@@ -79,7 +89,9 @@ h1 {
   box-shadow: 0 0 20px #a855f7;
 }
 
-
+/* ==========================
+   ERROR
+========================== */
 .error-message {
   color: #ff6b6b;
   background: rgba(255, 107, 107, 0.2);
@@ -90,60 +102,87 @@ h1 {
   animation: shake 0.3s;
 }
 
-
+/* ==========================
+   TODO LIST
+========================== */
 .todo-list {
   list-style: none;
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
-
+/* ==========================
+   TODO ITEM (новый стиль)
+========================== */
 .todo-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  width: 100%;
   background: rgba(255, 255, 255, 0.15);
-  padding: 12px 14px;
-  margin: 10px 0;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px 22px; /* шире */
+  margin: 14px 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   transition: 0.3s;
+  display: flex;
+  flex-direction: column; /* все элементы в колонку */
+  gap: 10px;
 }
 
 .todo-item:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+  box-shadow: 0 0 22px rgba(168, 85, 247, 0.7);
 }
 
-
+/* ==========================
+   TEXT SECTION (шире)
+========================== */
 .todo-text {
-  flex: 1;
-  margin: 0 10px;
-  font-size: 16px;
-  cursor: pointer;
+  width: 100%;
+  font-size: 18px; /* крупнее */
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: normal;
 }
 
+/* описание, статус, приоритет, дата */
+.todo-extra {
+  font-size: 15px;
+  opacity: 0.9;
+  line-height: 1.4;
+  color: #eaeaea;
+}
+
+/* ==========================
+   INPUT INSIDE TEXT
+========================== */
 .todo-text input {
   width: 100%;
-  padding: 6px;
-  border-radius: 6px;
+  padding: 8px;
+  border-radius: 8px;
   border: none;
   outline: none;
+  font-size: 16px;
 }
 
+/* ==========================
+   BUTTONS (Edit/Delete)
+========================== */
+.todo-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
 
 .edit-btn,
 .delete-btn,
 .save-btn {
   border: none;
-  border-radius: 8px;
-  padding: 6px 12px;
-  margin-left: 6px;
+  border-radius: 10px;
+  padding: 7px 14px;
   cursor: pointer;
   color: white;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 600;
   transition: 0.3s;
 }
-
 
 .edit-btn {
   background: linear-gradient(135deg, #38bdf8, #0ea5e9);
@@ -154,7 +193,6 @@ h1 {
   box-shadow: 0 0 10px #38bdf8;
 }
 
-
 .delete-btn {
   background: linear-gradient(135deg, #ff4d6d, #e11d48);
 }
@@ -163,7 +201,6 @@ h1 {
   transform: scale(1.1);
   box-shadow: 0 0 10px #ff4d6d;
 }
-
 
 .save-btn {
   background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -174,17 +211,19 @@ h1 {
   box-shadow: 0 0 10px #22c55e;
 }
 
-
+/* ==========================
+   PAGINATION
+========================== */
 .pagination {
-  margin-top: 20px;
+  margin-top: 25px;
   display: flex;
   justify-content: center;
   gap: 10px;
 }
 
 .pagination-btn {
-  padding: 6px 14px;
-  border-radius: 8px;
+  padding: 7px 16px;
+  border-radius: 10px;
   border: none;
   background: linear-gradient(135deg, #a855f7, #38bdf8);
   color: white;
@@ -202,6 +241,8 @@ h1 {
   cursor: not-allowed;
   box-shadow: none;
 }
+
+
 
 
 @keyframes fadeIn {
