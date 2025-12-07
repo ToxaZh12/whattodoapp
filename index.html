@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smart Todo</title>
+  <title>What to do</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,34 +14,30 @@
 <body>
   <main class="container">
     <header>
-      <h1>✅ Smart Todo</h1>
+      <h1>What to do</h1>
       <p class="subtitle">Organize your tasks smartly</p>
     </header>
 
     <div id="errorMessage" class="error-message"></div>
 
     <section class="input-group">
-      <input 
-        type="text" 
-        id="todoInput" 
-        class="todo-input" 
-        placeholder="Task title"
-        autocomplete="off"
-      >
+      <input type="text" id="todoInput" class="todo-input" placeholder="Task title" autocomplete="off">
+      <input type="text" id="todoOpis" class="todo-input" placeholder="Opis (description)" autocomplete="off">
+      <input type="date" id="todoDeadline" class="todo-input">
 
-      <input 
-        type="text" 
-        id="todoOpis" 
-        class="todo-input" 
-        placeholder="Opis (description)"
-        autocomplete="off"
-      >
+      <select id="todoPriority" class="todo-input">
+        <option value="">Priority</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
 
-      <input 
-        type="date" 
-        id="todoDeadline" 
-        class="todo-input"
-      >
+      <select id="todoStatus" class="todo-input">
+        <option value="">Status</option>
+        <option value="todo">Todo</option>
+        <option value="in-progress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
 
       <button id="addBtn" class="add-btn">Add Task</button>
     </section>
