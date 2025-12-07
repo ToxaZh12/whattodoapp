@@ -4,22 +4,24 @@ const addBtn = $("addBtn");
 const todoInput = $("todoInput");
 const todoOpis = $("todoOpis");
 const todoDeadline = $("todoDeadline");
+const todoPriority = $("todoPriority");
+const todoStatus = $("todoStatus");
+
 const todoList = $("todoList");
 const pagination = $("pagination");
 const errorBox = document.querySelector(".error-message");
 
-let todos = []; 
+let todos = [];
 const itemsPerPage = 3;
 let currentPage = 1;
 
 loadTodos();
 
-
 async function loadTodos() {
   try {
     const { data, error } = await supabase
       .from("whattodoapp")
-      .select("id, text, opis, deadline")
+      .select("id, text, opis, deadline, priority, status")
       .order("id", { ascending: false });
 
     if (!error && data) {
@@ -35,20 +37,18 @@ async function loadTodos() {
   render();
 }
 
-
 addBtn.onclick = async () => {
   const text = todoInput.value.trim();
   const opis = todoOpis.value.trim();
   const deadline = todoDeadline.value;
+  const priority = todoPriority.value;
+  const status = todoStatus.value;
 
- 
-  console.log("DEBUG SEND:", { text, opis, deadline });
-
-  if (!text || !opis || !deadline) {
+  if (!text || !opis || !deadline || !priority || !status) {
     return showError("Fill all fields");
   }
 
-  const newTodo = { text, opis, deadline };
+  const newTodo = { text, opis, deadline, priority, status };
   todos.unshift(newTodo);
 
   localStorage.setItem("todos", JSON.stringify(todos));
@@ -56,6 +56,8 @@ addBtn.onclick = async () => {
   todoInput.value = "";
   todoOpis.value = "";
   todoDeadline.value = "";
+  todoPriority.value = "";
+  todoStatus.value = "";
 
   currentPage = 1;
   render();
@@ -64,7 +66,7 @@ addBtn.onclick = async () => {
     const { data, error } = await supabase
       .from("whattodoapp")
       .insert([newTodo])
-      .select("id, text, opis, deadline")
+      .select("id, text, opis, deadline, priority, status")
       .limit(1);
 
     if (!error && data?.length) {
@@ -72,15 +74,12 @@ addBtn.onclick = async () => {
       localStorage.setItem("todos", JSON.stringify(todos));
       render();
     } else {
-      console.error("SUPABASE ERROR:", error);
       showError("Supabase insert error");
     }
-  } catch (e) {
-    console.error("NETWORK ERROR:", e);
+  } catch {
     showError("Saved locally — will sync when online");
   }
 };
-
 
 function render() {
   renderTodos();
@@ -99,6 +98,9 @@ function renderTodos() {
       <strong>${escapeHtml(item.text)}</strong><br>
       <small>${escapeHtml(item.opis)}</small><br>
       <small>📅 ${item.deadline}</small><br>
+      <small>⭐ Priority: ${item.priority}</small><br>
+      <small>📌 Status: ${item.status}</small><br>
+
       <button class="edit-btn">Edit</button>
       <button class="delete-btn">Delete</button>
     `;
@@ -124,7 +126,6 @@ function renderPagination() {
   }
 }
 
-
 function editTask(index, li) {
   const item = todos[index];
 
@@ -132,21 +133,37 @@ function editTask(index, li) {
     <input class="todo-text" value="${escapeHtml(item.text)}">
     <input class="todo-text" value="${escapeHtml(item.opis)}">
     <input type="date" class="todo-text" value="${item.deadline}">
+
+    <select class="todo-text">
+      <option value="low" ${item.priority === "low" ? "selected" : ""}>Low</option>
+      <option value="medium" ${item.priority === "medium" ? "selected" : ""}>Medium</option>
+      <option value="high" ${item.priority === "high" ? "selected" : ""}>High</option>
+    </select>
+
+    <select class="todo-text">
+      <option value="todo" ${item.status === "todo" ? "selected" : ""}>Todo</option>
+      <option value="in-progress" ${item.status === "in-progress" ? "selected" : ""}>In Progress</option>
+      <option value="done" ${item.status === "done" ? "selected" : ""}>Done</option>
+    </select>
+
     <button class="save-btn">Save</button>
     <button class="delete-btn">Delete</button>
   `;
 
   li.querySelector(".save-btn").onclick = async () => {
-    const inputs = li.querySelectorAll("input");
+    const inputs = li.querySelectorAll("input, select");
 
     const updated = {
       text: inputs[0].value.trim(),
       opis: inputs[1].value.trim(),
-      deadline: inputs[2].value
+      deadline: inputs[2].value,
+      priority: inputs[3].value,
+      status: inputs[4].value
     };
 
-    if (!updated.text || !updated.opis || !updated.deadline)
+    if (!updated.text || !updated.opis || !updated.deadline || !updated.priority || !updated.status) {
       return showError("Fill all fields");
+    }
 
     todos[index] = { ...todos[index], ...updated };
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -159,7 +176,6 @@ function editTask(index, li) {
 
   li.querySelector(".delete-btn").onclick = () => deleteTask(index);
 }
-
 
 async function deleteTask(index) {
   const removed = todos.splice(index, 1)[0];
