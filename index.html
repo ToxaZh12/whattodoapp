@@ -2,62 +2,42 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Smart Todo</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="container">
-    <header>
-      <h1>What to do</h1>
-      <p class="subtitle">Organize your tasks smartly</p>
-    </header>
 
-    <div id="errorMessage" class="error-message"></div>
+<main class="container">
+  <h1>✅ Smart Todo</h1>
 
-   
-    <section class="input-group">
-      <input 
-        type="text" 
-        id="todoInput" 
-        class="todo-input" 
-        placeholder="Task title"
-        autocomplete="off"
-      >
+  <div class="input-group">
+    <input id="todoInput" placeholder="Task title">
+    <input id="opisInput" placeholder="Description">
+    <input id="deadlineInput" type="date">
 
-      <input 
-        type="text" 
-        id="todoOpis" 
-        class="todo-input" 
-        placeholder="Opis (description)"
-        autocomplete="off"
-      >
+    <select id="priorityInput">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
 
-      <input 
-        type="date" 
-        id="todoDeadline" 
-        class="todo-input"
-      >
+    <select id="statusInput">
+      <option value="todo">To Do</option>
+      <option value="in_progress">In Progress</option>
+      <option value="done">Done</option>
+    </select>
 
-      <button id="addBtn" class="add-btn">Add Task</button>
-    </section>
+    <button id="addBtn">Add</button>
+  </div>
 
-    <section class="list-section">
-      <ul id="todoList" class="todo-list"></ul>
-    </section>
+  <ul id="todoList"></ul>
+  <div id="pagination"></div>
 
-    <footer>
-      <div id="pagination" class="pagination"></div>
-    </footer>
-  </main>
+  <div class="error-message"></div>
+</main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
     const SUPABASE_URL = "https://lpophlzugttsxwoocqhr.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxwb3BobHp1Z3R0c3h3b29jcWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5MzgyMjMsImV4cCI6MjA4MDUxNDIyM30.DGlVe8ZYAeBQlAeHdkI2UmJKwUgwihX25r5tZ4HdNn8";
     window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
