@@ -107,81 +107,59 @@ Publiczny adres aplikacji:
 https://whattodoapp.vercel.app/
 
 
-Dodane pola
+ Dodane pola
 
-- `deadline` (DATE) – termin wykonania zadania  
-- `priority` (TEXT: `low`, `medium`, `high`) – priorytet zadania  
+- **`deadline` (DATE)** – termin wykonania zadania  
+- **`priority` (TEXT: `low`, `medium`, `high`)** – priorytet zadania  
 
-Pola są wymagane oraz walidowane zarówno po stronie API, jak i frontendowej.
+Oba pola są wymagane oraz walidowane po stronie backendu i frontendowej.
 
 ---
 
-Zmiany w bazie danych
+##  Zmiany w bazie danych
 
-Do tabeli zostały dodane kolumny:
+Dodano nowe kolumny:
 
 ```sql
 ALTER TABLE whattodoapp
     ADD COLUMN deadline DATE NOT NULL,
     ADD COLUMN priority VARCHAR(16) NOT NULL;
-Migracja została zastosowana bez wpływu na istniejące dane.
+```
 
-Zmiany w API
-rozbudowa modelu/DTO o deadline i priority
+Migracja została wdrożona bez wpływu na istniejące dane.
 
-walidacja danych wejściowych:
+---
 
-deadline – wymagany
+##  Zmiany w API
 
-priority – wymagany, dostępne wartości: low, medium, high
+###  Rozbudowa struktury danych
+- rozszerzono model oraz DTO o pola `deadline` i `priority`
 
-aktualizacja endpointów:
+###  Walidacja
+- `deadline` – wymagany  
+- `priority` – wymagany; dozwolone wartości: `low`, `medium`, `high`
 
-POST – zapisuje nowe pola
+###  Zmiany w endpointach
+- **POST** – zapisuje nowe pola  
+- **PUT** – umożliwia edycję deadline i priority  
+- **GET** – zwraca obiekty z pełnym zestawem danych  
 
-PUT – aktualizuje pola
+Zachowano pełną kompatybilność z wcześniejszym CRUD-em partnera.
 
-GET – zwraca pełny obiekt z nowymi wartościami
+---
 
-zachowano pełną kompatybilność z dotychczasowym CRUD-em partnera
+##  Zmiany we Frontendzie
 
-Zmiany we Frontendzie
-Formularz dodawania:
-nowe pole Deadline
+### Formularz dodawania
+- dodano pole **Deadline**
+- dodano pole **Priority** (select)
 
-nowe pole Priority (select)
+###  Formularz edycji
+- umożliwia edycję nowych pól
 
-Formularz edycji:
-możliwość modyfikacji deadline i priority
+### Lista zadań
+- wyświetla deadline i priority przy każdym elemencie listy
 
-Lista zadań:
-wyświetlanie obu nowych pól przy każdym elemencie
+UI pozostało spójne i nie narusza działania funkcji partnera.
 
-UI działa poprawnie, a wcześniejsze funkcje partnera pozostały nienaruszone.
-
-Instrukcja testowania
-Uruchomić backend:
-
-bash
-Skopiuj kod
-mvn spring-boot:run
-lub
-
-bash
-Skopiuj kod
-docker compose up --build
-Upewnić się, że migracja tabeli została zastosowana.
-
-Uruchomić frontend (np. otworzyć index.html).
-
-Przetestować:
-
-dodawanie zadania z deadline + priority
-
-edycję obu nowych pól
-
-poprawność danych w UI i w bazie
-
-zachowanie endpointów (np. przez Postman/curl)
-
-działanie partnerowych funkcji w ramach smoke-testu
+---
