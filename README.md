@@ -116,7 +116,7 @@ Pola są wymagane oraz walidowane zarówno po stronie API, jak i frontendowej.
 
 ---
 
-##Zmiany w bazie danych
+Zmiany w bazie danych
 
 Do tabeli zostały dodane kolumny:
 
@@ -159,7 +159,7 @@ wyświetlanie obu nowych pól przy każdym elemencie
 
 UI działa poprawnie, a wcześniejsze funkcje partnera pozostały nienaruszone.
 
-🧪 Instrukcja testowania
+Instrukcja testowania
 Uruchomić backend:
 
 bash
