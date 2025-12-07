@@ -1,6 +1,6 @@
-/* ==========================
-   GLOBAL
-========================== */
+
+
+
 * {
   margin: 0;
   padding: 0;
@@ -18,9 +18,9 @@ body {
   padding: 40px 10px;
 }
 
-/* ==========================
-   CONTAINER (шире)
-========================== */
+
+
+
 .container {
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(14px);
@@ -34,9 +34,9 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-/* ==========================
-   TITLE
-========================== */
+
+
+
 h1 {
   font-size: 2rem;
   margin-bottom: 25px;
@@ -46,9 +46,9 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 
-/* ==========================
-   INPUTS
-========================== */
+
+ 
+
 .todo-input {
   width: 100%;
   padding: 14px;
@@ -66,9 +66,9 @@ h1 {
   transform: scale(1.02);
 }
 
-/* ==========================
-   ADD BUTTON
-========================== */
+
+ 
+
 .add-btn {
   width: 100%;
   padding: 14px;
@@ -89,9 +89,9 @@ h1 {
   box-shadow: 0 0 20px #a855f7;
 }
 
-/* ==========================
-   ERROR
-========================== */
+
+
+
 .error-message {
   color: #ff6b6b;
   background: rgba(255, 107, 107, 0.2);
@@ -102,27 +102,27 @@ h1 {
   animation: shake 0.3s;
 }
 
-/* ==========================
-   TODO LIST
-========================== */
+
+
+
 .todo-list {
   list-style: none;
   margin-top: 25px;
 }
 
-/* ==========================
-   TODO ITEM (новый стиль)
-========================== */
+
+
+
 .todo-item {
   width: 100%;
   background: rgba(255, 255, 255, 0.15);
-  padding: 20px 22px; /* шире */
+  padding: 20px 22px;
   margin: 14px 0;
   border-radius: 16px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   transition: 0.3s;
   display: flex;
-  flex-direction: column; /* все элементы в колонку */
+  flex-direction: column; 
   gap: 10px;
 }
 
@@ -131,18 +131,18 @@ h1 {
   box-shadow: 0 0 22px rgba(168, 85, 247, 0.7);
 }
 
-/* ==========================
-   TEXT SECTION (шире)
-========================== */
+
+
+
 .todo-text {
   width: 100%;
-  font-size: 18px; /* крупнее */
+  font-size: 18px; 
   font-weight: 600;
   line-height: 1.4;
   white-space: normal;
 }
 
-/* описание, статус, приоритет, дата */
+
 .todo-extra {
   font-size: 15px;
   opacity: 0.9;
@@ -150,9 +150,9 @@ h1 {
   color: #eaeaea;
 }
 
-/* ==========================
-   INPUT INSIDE TEXT
-========================== */
+
+
+
 .todo-text input {
   width: 100%;
   padding: 8px;
@@ -162,9 +162,9 @@ h1 {
   font-size: 16px;
 }
 
-/* ==========================
-   BUTTONS (Edit/Delete)
-========================== */
+
+
+
 .todo-buttons {
   display: flex;
   gap: 10px;
@@ -211,9 +211,9 @@ h1 {
   box-shadow: 0 0 10px #22c55e;
 }
 
-/* ==========================
-   PAGINATION
-========================== */
+
+
+
 .pagination {
   margin-top: 25px;
   display: flex;
