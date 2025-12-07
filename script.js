@@ -2,6 +2,8 @@ const $ = id => document.getElementById(id);
 
 const addBtn = $("addBtn");
 const todoInput = $("todoInput");
+const todoOpis = $("todoOpis");
+const todoDeadline = $("todoDeadline");
 const todoList = $("todoList");
 const pagination = $("pagination");
 const errorBox = document.querySelector(".error-message");
@@ -10,23 +12,23 @@ let todos = [];
 const itemsPerPage = 3;
 let currentPage = 1;
 
-
 loadTodos();
+
 
 async function loadTodos() {
   try {
     const { data, error } = await supabase
-      .from("whattodoapp")      
-      .select("id, text")
+      .from("whattodoapp")
+      .select("id, text, opis, deadline")
       .order("id", { ascending: false });
 
     if (!error && data) {
-      todos = data.map(t => ({ id: t.id, text: t.text }));
+      todos = data;
       localStorage.setItem("todos", JSON.stringify(todos));
     } else {
       todos = JSON.parse(localStorage.getItem("todos")) || [];
     }
-  } catch (e) {
+  } catch {
     todos = JSON.parse(localStorage.getItem("todos")) || [];
   }
 
@@ -36,27 +38,36 @@ async function loadTodos() {
 
 addBtn.onclick = async () => {
   const text = todoInput.value.trim();
-  if (!text) return showError("Enter a task");
+  const opis = todoOpis.value.trim();
+  const deadline = todoDeadline.value;
 
-  todos.unshift({ text }); // добавляем локально
+  if (!text || !opis || !deadline) return showError("Fill all fields");
+
+  const newTodo = { text, opis, deadline };
+  todos.unshift(newTodo);
+
   localStorage.setItem("todos", JSON.stringify(todos));
+
   todoInput.value = "";
+  todoOpis.value = "";
+  todoDeadline.value = "";
+
   currentPage = 1;
   render();
 
   try {
     const { data, error } = await supabase
-      .from("whattodoapp")      
-      .insert([{ text }])
-      .select("id, text")
+      .from("whattodoapp")
+      .insert([newTodo])
+      .select("id, text, opis, deadline")
       .limit(1);
 
     if (!error && data?.length) {
-      todos[0] = { id: data[0].id, text: data[0].text }; 
+      todos[0] = data[0];
       localStorage.setItem("todos", JSON.stringify(todos));
       render();
     }
-  } catch (e) {
+  } catch {
     showError("Saved locally — will sync when online");
   }
 };
@@ -74,8 +85,11 @@ function renderTodos() {
   todos.slice(start, start + itemsPerPage).forEach((item, i) => {
     const li = document.createElement("li");
     li.className = "todo-item";
+
     li.innerHTML = `
-      <span class="todo-text">${escapeHtml(item.text)}</span>
+      <strong>${escapeHtml(item.text)}</strong><br>
+      <small>${escapeHtml(item.opis)}</small><br>
+      <small>📅 ${item.deadline}</small><br>
       <button class="edit-btn">Edit</button>
       <button class="delete-btn">Delete</button>
     `;
@@ -86,7 +100,6 @@ function renderTodos() {
     todoList.append(li);
   });
 }
-
 
 function renderPagination() {
   pagination.innerHTML = "";
@@ -102,33 +115,36 @@ function renderPagination() {
   }
 }
 
-
+// ✅ РЕДАКТИРОВАНИЕ
 function editTask(index, li) {
   const item = todos[index];
+
   li.innerHTML = `
     <input class="todo-text" value="${escapeHtml(item.text)}">
+    <input class="todo-text" value="${escapeHtml(item.opis)}">
+    <input type="date" class="todo-text" value="${item.deadline}">
     <button class="save-btn">Save</button>
     <button class="delete-btn">Delete</button>
   `;
 
   li.querySelector(".save-btn").onclick = async () => {
-    const value = li.querySelector("input").value.trim();
-    if (!value) return showError("Task cannot be empty");
+    const inputs = li.querySelectorAll("input");
 
-    const old = item;
-    todos[index].text = value;
+    const updated = {
+      text: inputs[0].value.trim(),
+      opis: inputs[1].value.trim(),
+      deadline: inputs[2].value
+    };
+
+    if (!updated.text || !updated.opis || !updated.deadline)
+      return showError("Fill all fields");
+
+    todos[index] = { ...todos[index], ...updated };
     localStorage.setItem("todos", JSON.stringify(todos));
     render();
 
-    if (old.id) {
-      try {
-        await supabase
-          .from("whattodoapp")     
-          .update({ text: value })
-          .eq("id", old.id);
-      } catch (e) {
-        showError("Saved locally — will sync when online");
-      }
+    if (item.id) {
+      await supabase.from("whattodoapp").update(updated).eq("id", item.id);
     }
   };
 
@@ -138,19 +154,18 @@ function editTask(index, li) {
 
 async function deleteTask(index) {
   const removed = todos.splice(index, 1)[0];
+
   localStorage.setItem("todos", JSON.stringify(todos));
-  if ((currentPage - 1) * itemsPerPage >= todos.length) currentPage = Math.max(1, currentPage - 1);
+
+  if ((currentPage - 1) * itemsPerPage >= todos.length)
+    currentPage = Math.max(1, currentPage - 1);
+
   render();
 
   if (removed.id) {
-    try {
-      await supabase.from("whattodoapp").delete().eq("id", removed.id);
-    } catch (e) {
-      showError("Deleted locally — will sync when online");
-    }
+    await supabase.from("whattodoapp").delete().eq("id", removed.id);
   }
 }
-
 
 function showError(text) {
   errorBox.textContent = text;
@@ -159,5 +174,7 @@ function showError(text) {
 }
 
 function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return s.replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
 }
