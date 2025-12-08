@@ -165,6 +165,6 @@ UI pozostało spójne i nie narusza działania funkcji partnera.
 ---
 
 
-
+Zrzut ekranu UI
 <img width="753" height="898" alt="image" src="https://github.com/user-attachments/assets/81b7d549-0893-43ef-acd6-baf311f286f5" />
 
